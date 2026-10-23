@@ -1,0 +1,6 @@
+Benchmark                           (trades)  Mode  Cnt     Score      Error  Units
+MatcherBenchmark.exactOnlyBaseline    100000  avgt    5   312.941 ±   32.148  ms/op
+MatcherBenchmark.exactOnlyBaseline   1000000  avgt    5  3417.049 ± 1592.909  ms/op
+MatcherBenchmark.fullMatcher          100000  avgt    5   265.639 ±   86.775  ms/op
+MatcherBenchmark.fullMatcher         1000000  avgt    5  3570.704 ±  533.769  ms/op
+Benchmark result is saved to bench/build/results/jmh/results.json

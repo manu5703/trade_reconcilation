@@ -9,6 +9,9 @@ spring-boot = "3.5.6"
 springdoc = "2.8.9"
 # Overrides Boot's 1.21.3, which uses a Docker API version that Docker Engine 29+ rejects.
 testcontainers = "1.21.4"
+jmh = "1.37"
+jmh-plugin = "0.7.3"
+spark = "4.0.1"
 
 [libraries]
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
@@ -37,5 +40,8 @@ testcontainers-postgresql = { module = "org.testcontainers:postgresql" }
 awaitility = { module = "org.awaitility:awaitility" }
 springdoc-openapi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
 
+spark-sql = { module = "org.apache.spark:spark-sql_2.13", version.ref = "spark" }
+
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+jmh = { id = "me.champeau.jmh", version.ref = "jmh-plugin" }

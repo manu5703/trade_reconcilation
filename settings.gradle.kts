@@ -12,5 +12,5 @@ dependencyResolutionManagement {
     }
 }
 
-// recon-spark, recon-ui and bench are added in the stages that introduce them.
-include("recon-core", "recon-datagen", "recon-service")
+// recon-ui is an npm project (see recon-ui/package.json), not part of the Gradle build.
+include("recon-core", "recon-datagen", "recon-service", "recon-spark", "bench")

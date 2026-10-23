@@ -42,7 +42,8 @@ services:
       - "127.0.0.1:${SERVICE_PORT:-8080}:8080"
     volumes:
       # Datasets written by recon-datagen, read-only. POST /api/imports loads from here.
-      - ./data:/data:ro
+      # RECON_DATA_DIR=build/data-1m docker compose up  imports a different dataset.
+      - ${RECON_DATA_DIR:-./data}:/data:ro
 
   recon-ui:
     build: recon-ui

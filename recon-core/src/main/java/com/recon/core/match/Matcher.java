@@ -26,7 +26,8 @@ public final class Matcher {
     private final ToleranceConfig tolerances;
     private final List<MatchPass> passes;
 
-    private Matcher(StaticData staticData, ToleranceConfig tolerances, List<MatchPass> passes) {
+    // Package-private so tests can assemble alternative pipelines.
+    Matcher(StaticData staticData, ToleranceConfig tolerances, List<MatchPass> passes) {
         this.normalizer = new Normalizer(staticData);
         this.tolerances = tolerances;
         this.passes = passes;

@@ -196,8 +196,11 @@ public class BreakService {
             throw ApiException.badRequest("sort", "sort must be one of " + String.join(", ", SORTABLE.stream().sorted().toList())
                     + ", optionally prefixed with '-' for descending; got '" + sort + "'");
         }
-        // id as a tie-breaker gives a stable order, so paging never skips or repeats a row.
-        return Sort.by(descending ? Sort.Direction.DESC : Sort.Direction.ASC, field).and(Sort.by("id"));
+        // id as a tie-breaker gives a stable order, so paging never skips or repeats a row. It
+        // runs in the same direction as the main field so one (field, id) index serves both
+        // directions (V2 migration).
+        Sort.Direction direction = descending ? Sort.Direction.DESC : Sort.Direction.ASC;
+        return Sort.by(direction, field).and(Sort.by(direction, "id"));
     }
 
     private static OffsetDateTime utc(Instant instant) {

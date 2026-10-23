@@ -16,3 +16,4 @@ data/
 *.iml
 .vscode/
 .DS_Store
+bench/k6/results.json

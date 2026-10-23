@@ -80,7 +80,7 @@ class MatcherPropertiesTest {
     }
 
     /** A random mix of clean pairs, field breaks, missing, unexpected, duplicate and block cases. */
-    private static Book randomBook(int cases, long seed) {
+    static Book randomBook(int cases, long seed) {
         Random rng = new Random(seed);
         String[] isins = {Fixtures.APPLE, Fixtures.BOND};
         String[] counterparties = {Fixtures.ALPHA, Fixtures.BETA};

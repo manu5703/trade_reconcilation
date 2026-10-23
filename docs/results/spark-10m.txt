@@ -1,0 +1,20 @@
+Reconciled 10,000,000 internal trades and 8,833,560 confirms on 10 cores
+  read + match + write       52.2 s   (360,734 rows/s)
+  whole job                 318.6 s   (of which 146.6 s scoring against labels.csv; plus 1.1 s Spark startup)
+  matches by rule        {BLOCK=1500000, EXACT=8266673, FUZZY=199888}
+  matched trades         9,966,561   STP 9,733,084 = 97.33%
+  breaks                 300,099
+
+  against labels.csv         labelled  predicted  precision     recall
+  COMMISSION_DIFFERENCE        33,333     33,358     99.91%     99.99%
+  COUNTERPARTY_MISMATCH        33,333     33,339     99.83%     99.85%
+  DUPLICATE_CONFIRM            33,333     33,589     99.09%     99.85%
+  MISSING_CONFIRM              33,334     33,439     98.90%     99.21%
+  PRICE_OUT_OF_TOLERANCE       33,333     33,209     99.82%     99.45%
+  QUANTITY_MISMATCH            33,334     33,450     99.25%     99.60%
+  SETTLE_DATE_MISMATCH         33,333     33,329     99.98%     99.97%
+  SIDE_MISMATCH                33,333     33,203     99.99%     99.60%
+  UNEXPECTED_CONFIRM           33,334     33,181     99.38%     98.93%
+  ALL BREAKS                  300,000    300,097     99.57%     99.60%
+  false-break rate on noise rows: 0.00% (33/853,779)
+Output: /Users/u1567499/trade_reconcilation/build/spark-out-10m

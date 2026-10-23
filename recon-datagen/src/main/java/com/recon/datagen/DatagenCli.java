@@ -55,6 +55,9 @@ public final class DatagenCli implements Callable<Integer> {
     @Option(names = "--break-mix", description = "Relative break weights, e.g. PRICE_OUT_OF_TOLERANCE=2,MISSING_CONFIRM=1 (default: all 9 types equally).")
     private String breakMix;
 
+    @Option(names = "--instruments", defaultValue = "200", description = "Number of instruments; fewer means denser books (default: ${DEFAULT-VALUE}).")
+    private int instruments;
+
     @Option(names = "--tolerances", defaultValue = "config/tolerances.properties", description = "Tolerance config (default: ${DEFAULT-VALUE}).")
     private Path tolerancesFile;
 
@@ -74,6 +77,7 @@ public final class DatagenCli implements Callable<Integer> {
                     .tradesPerDay(trades).seed(seed).startDate(startDate).businessDays(days)
                     .breakRate(breakRate).noiseRate(noiseRate).blockShare(blockShare)
                     .breakMix(breakMix == null ? BreakMix.uniform() : BreakMix.parse(breakMix))
+                    .instruments(instruments)
                     .build();
             tolerances = ToleranceConfig.fromProperties(loadProperties(tolerancesFile));
         } catch (IllegalArgumentException e) {
