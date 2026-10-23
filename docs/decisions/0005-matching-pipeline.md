@@ -42,6 +42,11 @@ is solved on its own and the pass stays O(n).
 Effect on the 1M-trade default dataset: false breaks on clean cases fell from 45 to 3, and
 correct pairing on clean cases rose from 99.99% to 100.00%.
 
+**6. Carry-over resolves superseded breaks, not only matched ones.** An open break that didn't
+recur is auto-resolved whenever its records were in the run, including when a different break
+now describes them (MISSING_CONFIRM on Monday, QUANTITY_MISMATCH on Tuesday once the confirm
+arrives). Otherwise the stale Monday break would stay open next to the new one forever.
+
 ## Fuzzy scoring
 - Score = 100 − penalties (side 20, quantity 20, price 20, counterparty 20, settle date 15,
   commission 15, net amount 5). Accept above 70. Integer points avoid floating-point ties.

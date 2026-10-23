@@ -1,0 +1,9 @@
+.git
+.gradle
+**/build
+buildSrc/.kotlin
+**/.jqwik-database
+data
+.env
+.idea
+*.iml

@@ -12,5 +12,5 @@ dependencyResolutionManagement {
     }
 }
 
-// recon-service, recon-spark, recon-ui and bench are added in the stages that introduce them.
-include("recon-core", "recon-datagen")
+// recon-spark, recon-ui and bench are added in the stages that introduce them.
+include("recon-core", "recon-datagen", "recon-service")

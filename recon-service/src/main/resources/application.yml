@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: recon-service
+  config:
+    # Tolerances per asset class. The jar bundles config/tolerances.properties; a file in ./config
+    # (the repo root locally, /app/config in Docker) overrides it.
+    import: "classpath:tolerances.properties,optional:file:./config/tolerances.properties"
+  datasource:
+    url: ${RECON_DB_URL:jdbc:postgresql://localhost:5432/recon}
+    username: ${POSTGRES_USER:recon}
+    # Local-only default that matches docker-compose.yml; set POSTGRES_PASSWORD anywhere real.
+    password: ${POSTGRES_PASSWORD:recon_local_only}
+    hikari:
+      data-source-properties:
+        # The driver rewrites JDBC batches into multi-row INSERTs: far fewer round trips per run.
+        reWriteBatchedInserts: true
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate          # Flyway owns the schema; Hibernate only checks it matches.
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  mvc:
+    problemdetails:
+      enabled: true               # RFC 7807 error bodies
+  jackson:
+    default-property-inclusion: non_null
+
+recon:
+  import-directory: ${RECON_IMPORT_DIR:data}
+  run-threads: 2
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

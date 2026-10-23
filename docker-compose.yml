@@ -1,7 +1,12 @@
-# Local development stack. Stage 1 has only Postgres; the service and UI join in later stages.
+# Local stack: PostgreSQL and the reconciliation service. The UI joins in stage 4.
+#
+#   ./gradlew :recon-datagen:run --args="--trades 10000 --seed 42 --out data/"   # optional, for data
+#   docker compose up --build
+#   curl -X POST localhost:8080/api/imports
+#   curl -X POST "localhost:8080/api/runs?businessDate=2026-01-15"
 #
 # Credentials: the defaults below are local-only placeholders so `docker compose up` works with
-# no setup, and the port is bound to 127.0.0.1 only. Override them in a git-ignored .env file
+# no setup, and ports are bound to 127.0.0.1 only. Override them in a git-ignored .env file
 # (see .env.example). Never reuse them anywhere real.
 services:
   postgres:
@@ -19,6 +24,24 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+
+  recon-service:
+    build:
+      context: .
+      dockerfile: recon-service/Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      RECON_DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-recon}
+      POSTGRES_USER: ${POSTGRES_USER:-recon}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-recon_local_only}
+      RECON_IMPORT_DIR: /data
+    ports:
+      - "127.0.0.1:${SERVICE_PORT:-8080}:8080"
+    volumes:
+      # Datasets written by recon-datagen, read-only. POST /api/imports loads from here.
+      - ./data:/data:ro
 
 volumes:
   pgdata:

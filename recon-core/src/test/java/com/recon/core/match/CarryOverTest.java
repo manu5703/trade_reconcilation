@@ -58,6 +58,18 @@ class CarryOverTest {
     }
 
     @Test
+    void openBreakSupersededByADifferentBreakIsAutoResolved() {
+        // Monday the confirm was missing; Tuesday it arrived with the wrong quantity.
+        MatchResult today = fullMatcher().match(List.of(t1), List.of(confirmFor(t1, "C1").quantity("900").build()));
+        OpenBreak fromMonday = new OpenBreak(new Break.Key(BreakType.MISSING_CONFIRM, "T1", null, null), MONDAY);
+
+        CarryOver.Result result = CarryOver.apply(today, List.of(fromMonday), TUESDAY);
+
+        assertThat(result.breaks()).extracting(b -> b.brk().type()).containsExactly(BreakType.QUANTITY_MISMATCH);
+        assertThat(result.autoResolved()).containsExactly(fromMonday);
+    }
+
+    @Test
     void openBreakForRecordsNotInThisRunIsLeftAlone() {
         MatchResult today = fullMatcher().match(List.of(t1), List.of(confirmFor(t1, "C1").build()));
         OpenBreak otherDate = new OpenBreak(new Break.Key(BreakType.MISSING_CONFIRM, "T-OTHER", null, null), MONDAY);
