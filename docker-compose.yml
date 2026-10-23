@@ -1,9 +1,10 @@
-# Local stack: PostgreSQL and the reconciliation service. The UI joins in stage 4.
+# Local stack: PostgreSQL, the reconciliation service and the break-queue UI.
 #
 #   ./gradlew :recon-datagen:run --args="--trades 10000 --seed 42 --out data/"   # optional, for data
 #   docker compose up --build
 #   curl -X POST localhost:8080/api/imports
 #   curl -X POST "localhost:8080/api/runs?businessDate=2026-01-15"
+#   open http://localhost:3000
 #
 # Credentials: the defaults below are local-only placeholders so `docker compose up` works with
 # no setup, and ports are bound to 127.0.0.1 only. Override them in a git-ignored .env file
@@ -42,6 +43,14 @@ services:
     volumes:
       # Datasets written by recon-datagen, read-only. POST /api/imports loads from here.
       - ./data:/data:ro
+
+  recon-ui:
+    build: recon-ui
+    depends_on:
+      recon-service:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${UI_PORT:-3000}:8080"
 
 volumes:
   pgdata:

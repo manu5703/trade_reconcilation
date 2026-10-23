@@ -38,6 +38,26 @@ jobs:
           name: test-reports
           path: "**/build/reports/tests/"
 
+  ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: recon-ui
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: recon-ui/package-lock.json
+
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
   docker-image:
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -52,5 +72,13 @@ jobs:
           context: .
           file: recon-service/Dockerfile
           push: false
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=service
+          cache-to: type=gha,mode=max,scope=service
+
+      - name: Build the UI image
+        uses: docker/build-push-action@v6
+        with:
+          context: recon-ui
+          push: false
+          cache-from: type=gha,scope=ui
+          cache-to: type=gha,mode=max,scope=ui
