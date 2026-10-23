@@ -2,8 +2,8 @@ package com.recon.datagen.refdata;
 
 import com.recon.core.model.AssetClass;
 import com.recon.core.model.Source;
+import com.recon.core.refdata.CommissionSchedule;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -27,14 +27,8 @@ public record Counterparty(
         aliases = List.copyOf(aliases);
     }
 
-    /**
-     * Commission this counterparty should charge on one allocation: equities pay the schedule
-     * rate on principal, rounded to cents; bonds trade net (the dealer's markup is in the price).
-     */
+    /** Commission this counterparty should charge on one allocation; same rule the matcher uses. */
     public BigDecimal scheduledCommission(AssetClass assetClass, BigDecimal principal) {
-        if (assetClass == AssetClass.FIXED_INCOME) {
-            return BigDecimal.ZERO.setScale(2);
-        }
-        return principal.multiply(commissionBps).movePointLeft(4).setScale(2, RoundingMode.HALF_EVEN);
+        return CommissionSchedule.scheduled(assetClass, commissionBps, principal);
     }
 }

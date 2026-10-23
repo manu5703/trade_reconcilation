@@ -28,6 +28,9 @@ jobs:
       - name: Smoke-test the data generator
         run: ./gradlew :recon-datagen:run --args="--trades 2000 --seed 42 --out build/ci-data"
 
+      - name: Score the matcher against the labels
+        run: ./gradlew :recon-datagen:score --args="--data build/ci-data --repeat 1"
+
       - name: Upload test reports
         if: failure()
         uses: actions/upload-artifact@v4

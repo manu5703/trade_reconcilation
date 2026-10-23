@@ -19,6 +19,16 @@ tasks.named<JavaExec>("run") {
     workingDir = rootDir
 }
 
+// ./gradlew :recon-datagen:score --args="--data data/"
+tasks.register<JavaExec>("score") {
+    group = "application"
+    description = "Runs the matcher and the exact-only baseline on a generated dataset and scores them against labels.csv."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass = "com.recon.datagen.score.ScoreCli"
+    workingDir = rootDir
+    maxHeapSize = "4g"
+}
+
 tasks.test {
     systemProperty("recon.rootDir", rootDir.absolutePath)
     // The full-size generator tests hold ~20k cases in memory.
