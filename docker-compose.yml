@@ -1,0 +1,24 @@
+# Local development stack. Stage 1 has only Postgres; the service and UI join in later stages.
+#
+# Credentials: the defaults below are local-only placeholders so `docker compose up` works with
+# no setup, and the port is bound to 127.0.0.1 only. Override them in a git-ignored .env file
+# (see .env.example). Never reuse them anywhere real.
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-recon}
+      POSTGRES_USER: ${POSTGRES_USER:-recon}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-recon_local_only}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
